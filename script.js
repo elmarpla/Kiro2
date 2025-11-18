@@ -344,5 +344,80 @@ document.getElementById("forecastModal").addEventListener("click", (e) => {
     }
 });
 
+// Obtener ubicación actual del usuario
+async function obtenerUbicacionActual() {
+    if (!navigator.geolocation) {
+        console.log("Geolocalización no disponible");
+        return;
+    }
+    
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            position => resolve(position),
+            error => {
+                console.log("No se pudo obtener la ubicación:", error.message);
+                reject(error);
+            },
+            { timeout: 5000 }
+        );
+    });
+}
+
+async function obtenerNombreCiudad(lat, lon) {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?latitude=${lat}&longitude=${lon}&count=1&language=es&format=json`;
+    
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error al obtener nombre de ciudad");
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+            return data.results[0].name;
+        }
+        return "Tu ubicación";
+    } catch (error) {
+        console.error("Error obteniendo nombre de ciudad:", error);
+        return "Tu ubicación";
+    }
+}
+
+async function cargarClimaUbicacionActual() {
+    try {
+        const position = await obtenerUbicacionActual();
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        const nombreCiudad = await obtenerNombreCiudad(lat, lon);
+        const datos = await obtenerClima(nombreCiudad, lat, lon);
+        
+        const capital = { 
+            ciudad: nombreCiudad, 
+            provincia: "📍 Tu ubicación actual", 
+            lat, 
+            lon 
+        };
+        
+        const tarjeta = crearTarjetaClima(capital, datos);
+        tarjeta.classList.add("location-card");
+        
+        const grid = document.getElementById("weatherGrid");
+        grid.insertBefore(tarjeta, grid.firstChild);
+        
+        // Pequeña animación
+        setTimeout(() => {
+            tarjeta.style.animation = "highlight 1s ease";
+        }, 100);
+        
+    } catch (error) {
+        console.log("No se pudo cargar el clima de la ubicación actual");
+    }
+}
+
 // Cargar climas al iniciar
-cargarTodosLosClimas();
+async function inicializar() {
+    // Primero intentar cargar ubicación actual
+    await cargarClimaUbicacionActual();
+    // Luego cargar las capitales
+    await cargarTodosLosClimas();
+}
+
+inicializar();

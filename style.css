@@ -214,6 +214,16 @@ h1 {
     font-weight: 500;
 }
 
+.location-card {
+    border: 3px solid #667eea;
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.location-card .province {
+    color: #667eea;
+    font-weight: bold;
+}
+
 /* Modal */
 .modal {
     display: none;
