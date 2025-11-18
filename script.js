@@ -412,10 +412,32 @@ async function cargarClimaUbicacionActual() {
     }
 }
 
+// Cargar Mar del Plata primero
+async function cargarMarDelPlata() {
+    const marDelPlata = {
+        ciudad: "Mar del Plata",
+        provincia: "⭐ Ciudad destacada",
+        lat: -38.0055,
+        lon: -57.5426
+    };
+    
+    const datos = await obtenerClima(marDelPlata.ciudad, marDelPlata.lat, marDelPlata.lon);
+    const tarjeta = crearTarjetaClima(marDelPlata, datos);
+    tarjeta.classList.add("location-card");
+    
+    const grid = document.getElementById("weatherGrid");
+    grid.appendChild(tarjeta);
+    
+    // Pequeña animación
+    setTimeout(() => {
+        tarjeta.style.animation = "highlight 1s ease";
+    }, 100);
+}
+
 // Cargar climas al iniciar
 async function inicializar() {
-    // Primero intentar cargar ubicación actual
-    await cargarClimaUbicacionActual();
+    // Primero cargar Mar del Plata
+    await cargarMarDelPlata();
     // Luego cargar las capitales
     await cargarTodosLosClimas();
 }
