@@ -3,31 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clima en Capitales de Argentina</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portal Principal</title>
+    <link rel="stylesheet" href="portal.css">
 </head>
 <body>
     <div class="container">
-        <h1>🌤️ Clima Argentina</h1>
-        
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Buscar otra ciudad..." autocomplete="off">
-                <button id="searchBtn">🔍 Buscar</button>
+        <header class="header">
+            <h1>🌐 Portal Principal</h1>
+            <p class="subtitle">Bienvenido a tu centro de información</p>
+        </header>
+
+        <div class="cards-grid">
+            <a href="clima.html" class="portal-card">
+                <div class="card-icon">🌤️</div>
+                <h2>Clima Argentina</h2>
+                <p>Consulta el clima actual y previsión de 7 días en todas las capitales de Argentina</p>
+                <div class="card-footer">
+                    <span class="card-link">Ir al clima →</span>
+                </div>
+            </a>
+
+            <div class="portal-card coming-soon">
+                <div class="card-icon">📰</div>
+                <h2>Noticias</h2>
+                <p>Mantente informado con las últimas noticias</p>
+                <div class="card-footer">
+                    <span class="coming-soon-badge">Próximamente</span>
+                </div>
             </div>
-            <button id="locationBtn" class="location-btn">📍 Mi ubicación actual</button>
-            <div class="search-results" id="searchResults"></div>
+
+            <div class="portal-card coming-soon">
+                <div class="card-icon">💼</div>
+                <h2>Servicios</h2>
+                <p>Accede a todos nuestros servicios</p>
+                <div class="card-footer">
+                    <span class="coming-soon-badge">Próximamente</span>
+                </div>
+            </div>
+
+            <div class="portal-card coming-soon">
+                <div class="card-icon">📊</div>
+                <h2>Estadísticas</h2>
+                <p>Visualiza datos y estadísticas en tiempo real</p>
+                <div class="card-footer">
+                    <span class="coming-soon-badge">Próximamente</span>
+                </div>
+            </div>
         </div>
 
-        <div class="loading" id="loading">Cargando datos del clima...</div>
-        <div class="weather-grid" id="weatherGrid"></div>
+        <footer class="footer">
+            <p>© 2024 Portal Principal - Todos los derechos reservados</p>
+        </footer>
     </div>
-
-    <!-- Modal de previsión -->
-    <div id="forecastModal" class="modal">
-        <div class="modal-content" id="forecastContent"></div>
-    </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
