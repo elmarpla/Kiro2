@@ -4,9 +4,24 @@ Aplicación web que muestra el clima actual en todas las capitales provinciales 
 
 ## Uso
 
-Simplemente abre `index.html` en tu navegador. La aplicación cargará automáticamente el clima de todas las capitales.
+Simplemente abre `index.html` en tu navegador.
 
-**No requiere API key ni configuración** - usa Open-Meteo, una API completamente gratuita.
+## Configuración
+
+### Clima
+**No requiere API key** - usa Open-Meteo, una API completamente gratuita.
+
+### Fútbol (Opcional)
+Para ver partidos reales en lugar de datos de ejemplo:
+
+1. Regístrate gratis en [API-Football](https://www.api-football.com/)
+2. Obtén tu API key del dashboard
+3. Abre `futbol.js` y reemplaza `TU_API_KEY_AQUI` con tu API key en la línea 2:
+   ```javascript
+   const API_KEY = "tu_api_key_aqui";
+   ```
+
+Sin API key, la sección de fútbol mostrará datos de ejemplo.
 
 ## Características
 
