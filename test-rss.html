@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test RSS Feeds</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-result {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        .success {
+            border-left-color: #2ecc71;
+        }
+        .error {
+            border-left-color: #e74c3c;
+        }
+        .loading {
+            border-left-color: #f39c12;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Probando RSS Feeds de Diarios Argentinos</h1>
+    <button onclick="probarTodos()">Probar Todos</button>
+    <div id="results"></div>
+
+    <script>
+        const feedsParaProbar = [
+            { nombre: "Clarín", url: "https://www.clarin.com/rss/lo-ultimo/" },
+            { nombre: "La Nación", url: "https://www.lanacion.com.ar/arc/outboundfeeds/rss/" },
+            { nombre: "Ámbito", url: "https://www.ambito.com/rss/home.xml" },
+            { nombre: "Télam", url: "https://www.telam.com.ar/rss2/ultimasnoticias.xml" },
+            { nombre: "Perfil", url: "https://www.perfil.com/feed" },
+            { nombre: "Infobae", url: "https://www.infobae.com/feeds/rss/" },
+            { nombre: "Página/12", url: "https://www.pagina12.com.ar/rss/portada" },
+            { nombre: "Crónica", url: "https://www.cronica.com.ar/rss/" },
+            { nombre: "El Cronista", url: "https://www.cronista.com/rss/home.xml" },
+            { nombre: "BAE", url: "https://www.baenegocios.com/rss/" },
+            { nombre: "Minuto Uno", url: "https://www.minutouno.com/rss/" },
+            { nombre: "El Día (La Plata)", url: "https://www.eldia.com/rss" },
+            { nombre: "0223", url: "https://www.0223.com.ar/rss.xml" },
+            { nombre: "La Capital MDP", url: "https://www.lacapitalmdp.com/rss/" }
+        ];
+
+        async function probarFeed(feed) {
+            const resultsDiv = document.getElementById("results");
+            const resultDiv = document.createElement("div");
+            resultDiv.className = "test-result loading";
+            resultDiv.innerHTML = `<strong>${feed.nombre}</strong>: Probando...`;
+            resultsDiv.appendChild(resultDiv);
+
+            try {
+                const rss2jsonUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
+                const response = await fetch(rss2jsonUrl);
+                const data = await response.json();
+
+                if (data.status === "ok" && data.items && data.items.length > 0) {
+                    resultDiv.className = "test-result success";
+                    resultDiv.innerHTML = `
+                        <strong>${feed.nombre}</strong> ✅ FUNCIONA<br>
+                        <small>URL: ${feed.url}</small><br>
+                        <small>Noticias encontradas: ${data.items.length}</small><br>
+                        <small>Última: ${data.items[0].title}</small>
+                    `;
+                } else {
+                    resultDiv.className = "test-result error";
+                    resultDiv.innerHTML = `
+                        <strong>${feed.nombre}</strong> ❌ NO FUNCIONA<br>
+                        <small>URL: ${feed.url}</small><br>
+                        <small>Error: ${data.message || "Sin datos"}</small>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = "test-result error";
+                resultDiv.innerHTML = `
+                    <strong>${feed.nombre}</strong> ❌ ERROR<br>
+                    <small>URL: ${feed.url}</small><br>
+                    <small>Error: ${error.message}</small>
+                `;
+            }
+        }
+
+        async function probarTodos() {
+            document.getElementById("results").innerHTML = "";
+            for (const feed of feedsParaProbar) {
+                await probarFeed(feed);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Esperar 500ms entre pruebas
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias Argentina</title>
+    <link rel="stylesheet" href="noticias.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver al Portal</a>
+        <h1>📰 Noticias de Argentina</h1>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-source="all">Todas</button>
+            <button class="filter-btn" data-source="clarin">Clarín</button>
+            <button class="filter-btn" data-source="lanacion">La Nación</button>
+            <button class="filter-btn" data-source="ambito">Ámbito</button>
+            <button class="filter-btn" data-source="perfil">Perfil</button>
+            <button class="filter-btn" data-source="lacapital">La Capital MDP</button>
+        </div>
+
+        <div class="loading" id="loading">Cargando noticias...</div>
+        <div class="news-grid" id="newsGrid"></div>
+    </div>
+
+    <script src="noticias.js"></script>
+</body>
+</html>
