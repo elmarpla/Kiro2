@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima en Capitales de Argentina</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ Clima Argentina</h1>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar otra ciudad..." autocomplete="off">
+                <button id="searchBtn">🔍 Buscar</button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div class="loading" id="loading">Cargando datos del clima...</div>
+        <div class="weather-grid" id="weatherGrid"></div>
+    </div>
+
+    <!-- Modal de previsión -->
+    <div id="forecastModal" class="modal">
+        <div class="modal-content" id="forecastContent"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
