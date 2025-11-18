@@ -380,38 +380,6 @@ async function obtenerNombreCiudad(lat, lon) {
     }
 }
 
-async function cargarClimaUbicacionActual() {
-    try {
-        const position = await obtenerUbicacionActual();
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        
-        const nombreCiudad = await obtenerNombreCiudad(lat, lon);
-        const datos = await obtenerClima(nombreCiudad, lat, lon);
-        
-        const capital = { 
-            ciudad: nombreCiudad, 
-            provincia: "📍 Tu ubicación actual", 
-            lat, 
-            lon 
-        };
-        
-        const tarjeta = crearTarjetaClima(capital, datos);
-        tarjeta.classList.add("location-card");
-        
-        const grid = document.getElementById("weatherGrid");
-        grid.insertBefore(tarjeta, grid.firstChild);
-        
-        // Pequeña animación
-        setTimeout(() => {
-            tarjeta.style.animation = "highlight 1s ease";
-        }, 100);
-        
-    } catch (error) {
-        console.log("No se pudo cargar el clima de la ubicación actual");
-    }
-}
-
 // Cargar Mar del Plata primero
 async function cargarMarDelPlata() {
     const marDelPlata = {
@@ -433,6 +401,52 @@ async function cargarMarDelPlata() {
         tarjeta.style.animation = "highlight 1s ease";
     }, 100);
 }
+
+// Event listener para botón de ubicación
+const locationBtn = document.getElementById("locationBtn");
+locationBtn.addEventListener("click", async () => {
+    locationBtn.disabled = true;
+    locationBtn.textContent = "📍 Obteniendo ubicación...";
+    
+    try {
+        const position = await obtenerUbicacionActual();
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        const nombreCiudad = await obtenerNombreCiudad(lat, lon);
+        const datos = await obtenerClima(nombreCiudad, lat, lon);
+        
+        const capital = { 
+            ciudad: nombreCiudad, 
+            provincia: "📍 Tu ubicación actual", 
+            lat, 
+            lon 
+        };
+        
+        const tarjeta = crearTarjetaClima(capital, datos);
+        tarjeta.classList.add("location-card");
+        
+        const grid = document.getElementById("weatherGrid");
+        grid.insertBefore(tarjeta, grid.firstChild);
+        
+        // Scroll suave a la tarjeta
+        tarjeta.scrollIntoView({ behavior: "smooth", block: "center" });
+        tarjeta.style.animation = "highlight 1s ease";
+        
+        locationBtn.textContent = "✅ Ubicación agregada";
+        setTimeout(() => {
+            locationBtn.textContent = "📍 Mi ubicación actual";
+            locationBtn.disabled = false;
+        }, 2000);
+        
+    } catch (error) {
+        locationBtn.textContent = "❌ No se pudo obtener ubicación";
+        setTimeout(() => {
+            locationBtn.textContent = "📍 Mi ubicación actual";
+            locationBtn.disabled = false;
+        }, 2000);
+    }
+});
 
 // Cargar climas al iniciar
 async function inicializar() {
