@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuánto Tiempo...</title>
+    <link rel="stylesheet" href="tiempo.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver al Portal</a>
+        <h1>⏰ Cuánto Tiempo...</h1>
+        
+        <div class="calculators">
+            <!-- Calculadora: Tiempo desde -->
+            <div class="calculator-card">
+                <h2>⏮️ Tiempo desde...</h2>
+                <p class="description">Calcula cuánto tiempo pasó desde una fecha</p>
+                
+                <div class="input-group">
+                    <label for="fechaDesde">Selecciona una fecha:</label>
+                    <input type="datetime-local" id="fechaDesde">
+                    <button onclick="calcularDesde()" class="calc-btn">Calcular</button>
+                </div>
+                
+                <div id="resultadoDesde" class="resultado"></div>
+            </div>
+
+            <!-- Calculadora: Tiempo hasta -->
+            <div class="calculator-card">
+                <h2>⏭️ Tiempo hasta...</h2>
+                <p class="description">Calcula cuánto tiempo falta para una fecha</p>
+                
+                <div class="input-group">
+                    <label for="fechaHasta">Selecciona una fecha:</label>
+                    <input type="datetime-local" id="fechaHasta">
+                    <button onclick="calcularHasta()" class="calc-btn">Calcular</button>
+                </div>
+                
+                <div id="resultadoHasta" class="resultado"></div>
+            </div>
+        </div>
+
+        <!-- Eventos predefinidos -->
+        <div class="eventos-section">
+            <h2>📅 Eventos Importantes</h2>
+            <div class="eventos-grid" id="eventosGrid"></div>
+        </div>
+    </div>
+
+    <script src="tiempo.js"></script>
+</body>
+</html>
