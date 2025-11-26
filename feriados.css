@@ -1,0 +1,228 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back-button {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    margin-bottom: 20px;
+    transition: background 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.proximo-feriado {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.proximo-header {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.proximo-nombre {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.proximo-fecha {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.proximo-countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    min-width: 100px;
+}
+
+.countdown-valor {
+    font-size: 3rem;
+    font-weight: bold;
+    display: block;
+}
+
+.countdown-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 5px;
+}
+
+.feriados-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.feriados-section h2 {
+    color: #667eea;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.feriados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.feriado-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid #667eea;
+}
+
+.feriado-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.feriado-card.pasado {
+    opacity: 0.6;
+    border-left-color: #999;
+}
+
+.feriado-card.proximo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-left-color: #fff;
+}
+
+.feriado-card.puente {
+    border-left-color: #e74c3c;
+}
+
+.feriado-fecha {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.feriado-card.proximo .feriado-fecha {
+    color: white;
+}
+
+.feriado-nombre {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.feriado-card.proximo .feriado-nombre {
+    color: white;
+}
+
+.feriado-tipo {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.feriado-card.proximo .feriado-tipo {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.feriado-card.puente .feriado-tipo {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+.feriado-dias {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.feriado-card.proximo .feriado-dias {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.feriado-card.pasado .feriado-dias {
+    color: #999;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .proximo-feriado {
+        padding: 25px;
+    }
+    
+    .proximo-nombre {
+        font-size: 1.8rem;
+    }
+    
+    .proximo-fecha {
+        font-size: 1.1rem;
+    }
+    
+    .countdown-valor {
+        font-size: 2rem;
+    }
+    
+    .feriados-grid {
+        grid-template-columns: 1fr;
+    }
+}
