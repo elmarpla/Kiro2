@@ -5,17 +5,21 @@ const feriados2025 = [
     { fecha: "2025-02-25", nombre: "Carnaval", tipo: "Inamovible" },
     { fecha: "2025-03-24", nombre: "Día Nacional de la Memoria por la Verdad y la Justicia", tipo: "Inamovible" },
     { fecha: "2025-04-02", nombre: "Día del Veterano y de los Caídos en la Guerra de Malvinas", tipo: "Inamovible" },
+    { fecha: "2025-04-17", nombre: "Jueves Santo", tipo: "No laborable" },
     { fecha: "2025-04-18", nombre: "Viernes Santo", tipo: "Inamovible" },
     { fecha: "2025-05-01", nombre: "Día del Trabajador", tipo: "Inamovible" },
+    { fecha: "2025-05-02", nombre: "Puente Turístico", tipo: "No laborable" },
     { fecha: "2025-05-25", nombre: "Día de la Revolución de Mayo", tipo: "Inamovible" },
     { fecha: "2025-06-16", nombre: "Paso a la Inmortalidad del General Martín Miguel de Güemes", tipo: "Inamovible" },
     { fecha: "2025-06-20", nombre: "Paso a la Inmortalidad del General Manuel Belgrano", tipo: "Inamovible" },
     { fecha: "2025-07-09", nombre: "Día de la Independencia", tipo: "Inamovible" },
-    { fecha: "2025-08-15", nombre: "Paso a la Inmortalidad del General José de San Martín", tipo: "Puente" },
-    { fecha: "2025-10-10", nombre: "Día del Respeto a la Diversidad Cultural", tipo: "Puente" },
-    { fecha: "2025-11-21", nombre: "Día de la Soberanía Nacional", tipo: "Puente" },
+    { fecha: "2025-08-18", nombre: "Paso a la Inmortalidad del General José de San Martín", tipo: "Trasladable" },
+    { fecha: "2025-10-13", nombre: "Día del Respeto a la Diversidad Cultural", tipo: "Trasladable" },
+    { fecha: "2025-11-21", nombre: "Puente Turístico", tipo: "No laborable" },
+    { fecha: "2025-11-24", nombre: "Día de la Soberanía Nacional", tipo: "Trasladable" },
     { fecha: "2025-12-08", nombre: "Día de la Inmaculada Concepción de María", tipo: "Inamovible" },
-    { fecha: "2025-12-25", nombre: "Navidad", tipo: "Inamovible" }
+    { fecha: "2025-12-25", nombre: "Navidad", tipo: "Inamovible" },
+    { fecha: "2025-12-26", nombre: "Puente Turístico", tipo: "No laborable" }
 ];
 
 function calcularDiferencia(fecha1, fecha2) {
@@ -124,7 +128,7 @@ function mostrarFeriados() {
             card.classList.add('proximo');
         }
         
-        if (feriado.tipo === 'Puente') {
+        if (feriado.tipo === 'Trasladable' || feriado.tipo === 'No laborable') {
             card.classList.add('puente');
         }
         
