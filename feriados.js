@@ -1,5 +1,6 @@
-// Feriados Argentina 2025
-const feriados2025 = [
+// Feriados Argentina 2025 y 2026
+const todosFeriados = [
+    // 2025
     { fecha: "2025-01-01", nombre: "Año Nuevo", tipo: "Inamovible" },
     { fecha: "2025-02-24", nombre: "Carnaval", tipo: "Inamovible" },
     { fecha: "2025-02-25", nombre: "Carnaval", tipo: "Inamovible" },
@@ -19,7 +20,26 @@ const feriados2025 = [
     { fecha: "2025-11-24", nombre: "Día de la Soberanía Nacional", tipo: "Trasladable" },
     { fecha: "2025-12-08", nombre: "Día de la Inmaculada Concepción de María", tipo: "Inamovible" },
     { fecha: "2025-12-25", nombre: "Navidad", tipo: "Inamovible" },
-    { fecha: "2025-12-26", nombre: "Puente Turístico", tipo: "No laborable" }
+    { fecha: "2025-12-26", nombre: "Puente Turístico", tipo: "No laborable" },
+    
+    // 2026
+    { fecha: "2026-01-01", nombre: "Año Nuevo", tipo: "Inamovible" },
+    { fecha: "2026-02-16", nombre: "Carnaval", tipo: "Inamovible" },
+    { fecha: "2026-02-17", nombre: "Carnaval", tipo: "Inamovible" },
+    { fecha: "2026-03-24", nombre: "Día Nacional de la Memoria por la Verdad y la Justicia", tipo: "Inamovible" },
+    { fecha: "2026-04-02", nombre: "Jueves Santo", tipo: "No laborable" },
+    { fecha: "2026-04-03", nombre: "Viernes Santo", tipo: "Inamovible" },
+    { fecha: "2026-04-02", nombre: "Día del Veterano y de los Caídos en la Guerra de Malvinas", tipo: "Inamovible" },
+    { fecha: "2026-05-01", nombre: "Día del Trabajador", tipo: "Inamovible" },
+    { fecha: "2026-05-25", nombre: "Día de la Revolución de Mayo", tipo: "Inamovible" },
+    { fecha: "2026-06-15", nombre: "Paso a la Inmortalidad del General Martín Miguel de Güemes", tipo: "Trasladable" },
+    { fecha: "2026-06-22", nombre: "Paso a la Inmortalidad del General Manuel Belgrano", tipo: "Trasladable" },
+    { fecha: "2026-07-09", nombre: "Día de la Independencia", tipo: "Inamovible" },
+    { fecha: "2026-08-17", nombre: "Paso a la Inmortalidad del General José de San Martín", tipo: "Trasladable" },
+    { fecha: "2026-10-12", nombre: "Día del Respeto a la Diversidad Cultural", tipo: "Trasladable" },
+    { fecha: "2026-11-23", nombre: "Día de la Soberanía Nacional", tipo: "Trasladable" },
+    { fecha: "2026-12-08", nombre: "Día de la Inmaculada Concepción de María", tipo: "Inamovible" },
+    { fecha: "2026-12-25", nombre: "Navidad", tipo: "Inamovible" }
 ];
 
 function calcularDiferencia(fecha1, fecha2) {
@@ -46,18 +66,19 @@ function formatearFecha(fechaStr) {
     return `${dias[fecha.getDay()]} ${fecha.getDate()} de ${meses[fecha.getMonth()]}`;
 }
 
-function obtenerProximoFeriado() {
+function obtenerFeriadosFuturos() {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     
-    for (let feriado of feriados2025) {
+    return todosFeriados.filter(feriado => {
         const fechaFeriado = new Date(feriado.fecha + 'T00:00:00');
-        if (fechaFeriado >= hoy) {
-            return feriado;
-        }
-    }
-    
-    return null;
+        return fechaFeriado >= hoy;
+    });
+}
+
+function obtenerProximoFeriado() {
+    const futuros = obtenerFeriadosFuturos();
+    return futuros.length > 0 ? futuros[0] : null;
 }
 
 function actualizarProximoFeriado() {
@@ -110,21 +131,25 @@ function mostrarFeriados() {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     
+    const feriadosFuturos = obtenerFeriadosFuturos();
     const proximoFeriado = obtenerProximoFeriado();
     
     grid.innerHTML = '';
     
-    feriados2025.forEach(feriado => {
+    if (feriadosFuturos.length === 0) {
+        grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">No hay más feriados programados</div>';
+        return;
+    }
+    
+    feriadosFuturos.forEach(feriado => {
         const fechaFeriado = new Date(feriado.fecha + 'T00:00:00');
         const diff = calcularDiferencia(hoy, fechaFeriado);
         
         const card = document.createElement('div');
         card.className = 'feriado-card';
         
-        // Determinar si es pasado, próximo o futuro
-        if (fechaFeriado < hoy) {
-            card.classList.add('pasado');
-        } else if (proximoFeriado && feriado.fecha === proximoFeriado.fecha) {
+        // Determinar si es el próximo
+        if (proximoFeriado && feriado.fecha === proximoFeriado.fecha) {
             card.classList.add('proximo');
         }
         
@@ -133,9 +158,7 @@ function mostrarFeriados() {
         }
         
         let diasTexto = '';
-        if (fechaFeriado < hoy) {
-            diasTexto = `Pasó hace ${diff.dias} ${diff.dias === 1 ? 'día' : 'días'}`;
-        } else if (diff.dias === 0) {
+        if (diff.dias === 0) {
             diasTexto = '¡Es hoy! 🎉';
         } else if (diff.dias === 1) {
             diasTexto = '¡Mañana!';
