@@ -177,9 +177,134 @@ function mostrarFeriados() {
     });
 }
 
+// Variables para el calendario
+let mesActual = new Date().getMonth();
+let añoActual = new Date().getFullYear();
+
+function cambiarMes(direccion) {
+    mesActual += direccion;
+    
+    if (mesActual > 11) {
+        mesActual = 0;
+        añoActual++;
+    } else if (mesActual < 0) {
+        mesActual = 11;
+        añoActual--;
+    }
+    
+    generarCalendario();
+}
+
+function generarCalendario() {
+    const calendario = document.getElementById('calendario');
+    const mesActualDiv = document.getElementById('mesActual');
+    
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    
+    mesActualDiv.textContent = `${meses[mesActual]} ${añoActual}`;
+    
+    // Limpiar calendario
+    calendario.innerHTML = '';
+    
+    // Días de la semana
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    diasSemana.forEach(dia => {
+        const diaDiv = document.createElement('div');
+        diaDiv.className = 'dia-semana';
+        diaDiv.textContent = dia;
+        calendario.appendChild(diaDiv);
+    });
+    
+    // Primer día del mes
+    const primerDia = new Date(añoActual, mesActual, 1);
+    const ultimoDia = new Date(añoActual, mesActual + 1, 0);
+    const diasEnMes = ultimoDia.getDate();
+    const primerDiaSemana = primerDia.getDay();
+    
+    // Días del mes anterior
+    const mesAnterior = new Date(añoActual, mesActual, 0);
+    const diasMesAnterior = mesAnterior.getDate();
+    
+    for (let i = primerDiaSemana - 1; i >= 0; i--) {
+        const diaDiv = crearDiaCalendario(diasMesAnterior - i, mesActual - 1, añoActual, true);
+        calendario.appendChild(diaDiv);
+    }
+    
+    // Días del mes actual
+    for (let dia = 1; dia <= diasEnMes; dia++) {
+        const diaDiv = crearDiaCalendario(dia, mesActual, añoActual, false);
+        calendario.appendChild(diaDiv);
+    }
+    
+    // Días del mes siguiente
+    const diasRestantes = 42 - (primerDiaSemana + diasEnMes);
+    for (let dia = 1; dia <= diasRestantes; dia++) {
+        const diaDiv = crearDiaCalendario(dia, mesActual + 1, añoActual, true);
+        calendario.appendChild(diaDiv);
+    }
+}
+
+function crearDiaCalendario(dia, mes, año, otroMes) {
+    const diaDiv = document.createElement('div');
+    diaDiv.className = 'dia';
+    
+    if (otroMes) {
+        diaDiv.classList.add('otro-mes');
+    }
+    
+    // Ajustar mes si es necesario
+    let mesReal = mes;
+    let añoReal = año;
+    
+    if (mes < 0) {
+        mesReal = 11;
+        añoReal--;
+    } else if (mes > 11) {
+        mesReal = 0;
+        añoReal++;
+    }
+    
+    const fechaStr = `${añoReal}-${String(mesReal + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+    const fecha = new Date(fechaStr + 'T00:00:00');
+    
+    // Verificar si es hoy
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    if (fecha.getTime() === hoy.getTime() && !otroMes) {
+        diaDiv.classList.add('hoy');
+    }
+    
+    // Buscar si es feriado
+    const feriado = todosFeriados.find(f => f.fecha === fechaStr);
+    
+    if (feriado) {
+        if (feriado.tipo === 'Inamovible') {
+            diaDiv.classList.add('feriado-inamovible');
+        } else if (feriado.tipo === 'Trasladable') {
+            diaDiv.classList.add('feriado-trasladable');
+        } else if (feriado.tipo === 'No laborable') {
+            diaDiv.classList.add('feriado-no-laborable');
+        }
+        
+        diaDiv.innerHTML = `
+            <span class="dia-numero">${dia}</span>
+            <span class="dia-nombre">${feriado.nombre}</span>
+        `;
+        
+        diaDiv.title = feriado.nombre;
+    } else {
+        diaDiv.innerHTML = `<span class="dia-numero">${dia}</span>`;
+    }
+    
+    return diaDiv;
+}
+
 // Actualizar cada segundo
 actualizarProximoFeriado();
 mostrarFeriados();
+generarCalendario();
 
 setInterval(() => {
     actualizarProximoFeriado();

@@ -201,6 +201,156 @@ h1 {
     color: #999;
 }
 
+.calendario-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.calendario-section h2 {
+    color: #667eea;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.calendario-controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-mes {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.btn-mes:hover {
+    transform: scale(1.05);
+}
+
+.mes-actual {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.dia-semana {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    color: #667eea;
+    font-size: 0.9rem;
+}
+
+.dia {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dia:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dia.otro-mes {
+    opacity: 0.3;
+}
+
+.dia.hoy {
+    background: #667eea;
+    color: white;
+    font-weight: bold;
+}
+
+.dia.feriado-inamovible {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.dia.feriado-trasladable {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.dia.feriado-no-laborable {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.dia-numero {
+    font-size: 1.1rem;
+}
+
+.dia-nombre {
+    font-size: 0.7rem;
+    margin-top: 4px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.leyenda {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.leyenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.leyenda-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.leyenda-color.inamovible {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+}
+
+.leyenda-color.trasladable {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+
+.leyenda-color.no-laborable {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 1.8rem;
@@ -224,5 +374,23 @@ h1 {
     
     .feriados-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .calendario-controles {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .mes-actual {
+        font-size: 1.2rem;
+    }
+    
+    .dia-nombre {
+        font-size: 0.6rem;
+    }
+    
+    .leyenda {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

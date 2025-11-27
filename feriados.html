@@ -21,6 +21,28 @@
             </div>
         </div>
 
+        <!-- Calendario -->
+        <div class="calendario-section">
+            <h2>📆 Calendario de Feriados</h2>
+            <div class="calendario-controles">
+                <button onclick="cambiarMes(-1)" class="btn-mes">← Anterior</button>
+                <div class="mes-actual" id="mesActual">Mes Año</div>
+                <button onclick="cambiarMes(1)" class="btn-mes">Siguiente →</button>
+            </div>
+            <div class="calendario" id="calendario"></div>
+            <div class="leyenda">
+                <div class="leyenda-item">
+                    <span class="leyenda-color inamovible"></span> Feriado Inamovible
+                </div>
+                <div class="leyenda-item">
+                    <span class="leyenda-color trasladable"></span> Feriado Trasladable
+                </div>
+                <div class="leyenda-item">
+                    <span class="leyenda-color no-laborable"></span> Día No Laborable
+                </div>
+            </div>
+        </div>
+
         <!-- Lista de todos los feriados -->
         <div class="feriados-section">
             <h2>📅 Próximos Feriados</h2>
