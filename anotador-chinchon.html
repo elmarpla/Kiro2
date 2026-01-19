@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anotador Chinchón</title>
-    <link rel="stylesheet" href="anotador-estrategia.css">
+    <link rel="stylesheet" href="anotador-chinchon.css">
 </head>
 <body>
     <div class="container">
@@ -14,20 +14,95 @@
             <p class="subtitle">Contador de puntos para chinchón</p>
         </header>
 
-        <div class="setup-card">
-            <h2>🚧 En Desarrollo</h2>
-            <p>Esta sección estará disponible próximamente.</p>
-            <p>Incluirá:</p>
-            <ul>
-                <li>Anotador automático de puntos</li>
-                <li>Historial de partidas</li>
-                <li>Pausar y reanudar partidas</li>
-                <li>Múltiples jugadores</li>
-            </ul>
-            <div class="buttons-group">
-                <a href="anotador.html" class="btn-primary">Volver a Juegos</a>
+        <!-- Configuración inicial -->
+        <div id="setup-screen" class="screen active">
+            <div class="setup-card">
+                <h2>Nueva Partida de Chinchón</h2>
+                
+                <div class="form-group">
+                    <label for="player-count">Cantidad de jugadores:</label>
+                    <select id="player-count">
+                        <option value="2">2 jugadores</option>
+                        <option value="3">3 jugadores</option>
+                        <option value="4">4 jugadores</option>
+                        <option value="5">5 jugadores</option>
+                        <option value="6">6 jugadores</option>
+                    </select>
+                </div>
+
+                <div id="players-names" class="players-section">
+                    <!-- Se genera dinámicamente -->
+                </div>
+
+                <div class="buttons-group">
+                    <button id="start-game" class="btn-primary">Iniciar Partida</button>
+                    <button id="load-game" class="btn-secondary">Cargar Partida</button>
+                    <button id="view-history" class="btn-secondary">Ver Historial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de juego -->
+        <div id="game-screen" class="screen">
+            <div class="game-info">
+                <div class="game-header">
+                    <h3>Partida en curso</h3>
+                    <div class="game-actions">
+                        <button id="pause-game" class="btn-warning">Pausar Partida</button>
+                        <button id="end-game" class="btn-danger">Terminar Partida</button>
+                    </div>
+                </div>
+                
+                <div class="current-hand">
+                    <h4>Mano <span id="hand-number">1</span></h4>
+                </div>
+            </div>
+
+            <div class="scoreboard">
+                <div id="players-scores" class="scores-grid">
+                    <!-- Se genera dinámicamente -->
+                </div>
+                
+                <div class="hand-input">
+                    <h4>Anotar puntos de la mano:</h4>
+                    <div id="hand-inputs" class="hand-inputs-grid">
+                        <!-- Se genera dinámicamente -->
+                    </div>
+                    <button id="add-hand" class="btn-primary">Anotar Mano</button>
+                </div>
+            </div>
+
+            <div class="hands-history">
+                <h4>Historial de manos:</h4>
+                <div id="hands-list" class="hands-container">
+                    <!-- Se genera dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de historial -->
+        <div id="history-screen" class="screen">
+            <div class="history-header">
+                <h2>Historial de Partidas</h2>
+                <button id="back-to-setup" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="games-history" class="history-list">
+                <!-- Se genera dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Pantalla de cargar partida -->
+        <div id="load-screen" class="screen">
+            <div class="load-header">
+                <h2>Partidas Pausadas</h2>
+                <button id="back-to-setup-2" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="paused-games" class="history-list">
+                <!-- Se genera dinámicamente -->
             </div>
         </div>
     </div>
+
+    <script src="anotador-chinchon.js"></script>
 </body>
 </html>
