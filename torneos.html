@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos de Artes Marciales</title>
+    <link rel="stylesheet" href="torneos.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Volver al Portal</a>
+        <h1>🥋 Torneos de Artes Marciales</h1>
+        <p class="subtitle">Próximos torneos en Argentina y países limítrofes</p>
+        
+        <div class="filtros">
+            <button class="filtro-btn active" data-pais="todos">Todos</button>
+            <button class="filtro-btn" data-pais="argentina">🇦🇷 Argentina</button>
+            <button class="filtro-btn" data-pais="brasil">🇧🇷 Brasil</button>
+            <button class="filtro-btn" data-pais="chile">🇨🇱 Chile</button>
+            <button class="filtro-btn" data-pais="uruguay">🇺🇾 Uruguay</button>
+        </div>
+
+        <div class="loading" id="loading">Cargando torneos...</div>
+        <div class="torneos-grid" id="torneosGrid"></div>
+        
+        <div class="info-box">
+            <p><strong>Nota:</strong> Los datos se obtienen de Smoothcomp. Para registrarte en un torneo, haz click en "Ver más" y serás redirigido al sitio oficial.</p>
+        </div>
+    </div>
+
+    <script src="torneos.js"></script>
+</body>
+</html>

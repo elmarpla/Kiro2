@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotador Truco</title>
+    <link rel="stylesheet" href="anotador-truco.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="anotador.html" class="back-btn">← Volver a Juegos</a>
+            <h1>🃏 Truco Argentino</h1>
+            <p class="subtitle">Anotador tradicional hasta 30 puntos</p>
+        </header>
+
+        <!-- Configuración inicial -->
+        <div id="setup-screen" class="screen active">
+            <div class="setup-card">
+                <h2>Nueva Partida de Truco</h2>
+                
+                <div class="form-group">
+                    <label for="game-mode">Modalidad:</label>
+                    <select id="game-mode">
+                        <option value="30">Truco a 30 puntos</option>
+                        <option value="15">Truco a 15 puntos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="team1-name">Nombre Equipo 1:</label>
+                    <input type="text" id="team1-name" placeholder="Nosotros" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="team2-name">Nombre Equipo 2:</label>
+                    <input type="text" id="team2-name" placeholder="Ellos" required>
+                </div>
+
+                <div class="buttons-group">
+                    <button id="start-game" class="btn-primary">Iniciar Partida</button>
+                    <button id="load-game" class="btn-secondary">Cargar Partida</button>
+                    <button id="view-history" class="btn-secondary">Ver Historial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de juego -->
+        <div id="game-screen" class="screen">
+            <div class="game-info">
+                <div class="game-header">
+                    <h3>Partida en curso</h3>
+                    <div class="game-actions">
+                        <button id="pause-game" class="btn-warning">Pausar</button>
+                        <button id="end-game" class="btn-danger">Terminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="truco-board">
+                <div class="teams-score">
+                    <div class="team-section">
+                        <h3 id="team1-display">Equipo 1</h3>
+                        <div class="score-display" id="team1-score">0</div>
+                        <div class="score-buttons">
+                            <button class="score-btn" onclick="trucoGame.addPoints(0, 1)">+1</button>
+                            <button class="score-btn" onclick="trucoGame.addPoints(0, 2)">+2</button>
+                            <button class="score-btn" onclick="trucoGame.addPoints(0, 3)">+3</button>
+                        </div>
+                    </div>
+
+                    <div class="vs-section">
+                        <div class="vs">VS</div>
+                        <div class="target-score">
+                            Meta: <span id="target-points">30</span> puntos
+                        </div>
+                    </div>
+
+                    <div class="team-section">
+                        <h3 id="team2-display">Equipo 2</h3>
+                        <div class="score-display" id="team2-score">0</div>
+                        <div class="score-buttons">
+                            <button class="score-btn" onclick="trucoGame.addPoints(1, 1)">+1</button>
+                            <button class="score-btn" onclick="trucoGame.addPoints(1, 2)">+2</button>
+                            <button class="score-btn" onclick="trucoGame.addPoints(1, 3)">+3</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="undo-section">
+                    <button id="undo-last" class="btn-secondary">↶ Deshacer último punto</button>
+                </div>
+            </div>
+
+            <div class="hands-history">
+                <h4>Historial de puntos:</h4>
+                <div id="points-list" class="points-container">
+                    <!-- Se genera dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de historial -->
+        <div id="history-screen" class="screen">
+            <div class="history-header">
+                <h2>Historial de Partidas</h2>
+                <button id="back-to-setup" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="games-history" class="history-list">
+                <!-- Se genera dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Pantalla de cargar partida -->
+        <div id="load-screen" class="screen">
+            <div class="load-header">
+                <h2>Partidas Pausadas</h2>
+                <button id="back-to-setup-2" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="paused-games" class="history-list">
+                <!-- Se genera dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script src="anotador-truco.js"></script>
+</body>
+</html>

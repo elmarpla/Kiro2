@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotador Generala</title>
+    <link rel="stylesheet" href="anotador-generala.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="anotador.html" class="back-btn">← Volver a Juegos</a>
+            <h1>🎲 Generala</h1>
+            <p class="subtitle">Planilla digital de generala</p>
+        </header>
+
+        <div id="setup-screen" class="screen active">
+            <div class="setup-card">
+                <h2>Nueva Partida de Generala</h2>
+                
+                <div class="form-group">
+                    <label for="player-count">Cantidad de jugadores:</label>
+                    <select id="player-count">
+                        <option value="2">2 jugadores</option>
+                        <option value="3">3 jugadores</option>
+                        <option value="4">4 jugadores</option>
+                        <option value="5">5 jugadores</option>
+                        <option value="6">6 jugadores</option>
+                    </select>
+                </div>
+
+                <div id="players-names" class="players-section"></div>
+
+                <div class="buttons-group">
+                    <button id="start-game" class="btn-primary">Iniciar Partida</button>
+                    <button id="load-game" class="btn-secondary">Cargar Partida</button>
+                    <button id="view-history" class="btn-secondary">Ver Historial</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div class="game-info">
+                <div class="game-header">
+                    <h3>Generala en curso</h3>
+                    <div class="game-actions">
+                        <button id="pause-game" class="btn-warning">Pausar</button>
+                        <button id="end-game" class="btn-danger">Terminar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="generala-board">
+                <div class="scorecard">
+                    <table id="scorecard-table">
+                        <!-- Se genera dinámicamente -->
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="history-screen" class="screen">
+            <div class="history-header">
+                <h2>Historial de Partidas</h2>
+                <button id="back-to-setup" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="games-history" class="history-list"></div>
+        </div>
+
+        <div id="load-screen" class="screen">
+            <div class="load-header">
+                <h2>Partidas Pausadas</h2>
+                <button id="back-to-setup-2" class="btn-secondary">← Volver</button>
+            </div>
+            <div id="paused-games" class="history-list"></div>
+        </div>
+    </div>
+
+    <script src="anotador-generala.js"></script>
+</body>
+</html>
