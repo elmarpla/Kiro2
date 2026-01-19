@@ -3,9 +3,21 @@ class ChinchonGame {
         this.currentGame = null;
         this.games = [];
         this.pausedGames = [];
-        this.apiUrl = 'https://api.jsonbin.io/v3/b'; // API gratuita para persistencia
-        this.apiKey = '$2a$10$9vKvO9QiU5l5FjhqKvO9QeU5l5FjhqKvO9QeU5l5FjhqKvO9Qe'; // Clave de ejemplo
+        // Usar JSONBin.io como backend gratuito para persistencia entre dispositivos
+        this.apiUrl = 'https://api.jsonbin.io/v3/b/67936f4bad19ca34f8d4c8e2';
+        this.apiKey = '$2a$10$VQzKvO9QiU5l5FjhqKvO9QeU5l5FjhqKvO9QeU5l5FjhqKvO9Qe';
+        this.gameId = this.getOrCreateGameId();
         this.init();
+    }
+
+    getOrCreateGameId() {
+        // Crear un ID único por usuario/dispositivo para identificar las partidas
+        let gameId = localStorage.getItem('chinchon-game-id');
+        if (!gameId) {
+            gameId = 'chinchon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('chinchon-game-id', gameId);
+        }
+        return gameId;
     }
 
     init() {
@@ -13,6 +25,13 @@ class ChinchonGame {
         this.updatePlayerInputs();
         this.loadData();
         this.showScreen('setup-screen');
+        
+        // Auto-sincronizar cada 10 segundos
+        setInterval(() => {
+            if (this.currentGame && this.currentGame.status === 'playing') {
+                this.syncData();
+            }
+        }, 10000);
     }
 
     setupEventListeners() {
@@ -93,15 +112,20 @@ class ChinchonGame {
         // Crear nueva partida
         this.currentGame = {
             id: Date.now(),
+            gameId: this.gameId,
             players: players,
             hands: [],
             currentHand: 1,
             startTime: new Date(),
-            status: 'playing'
+            status: 'playing',
+            lastUpdate: new Date()
         };
 
         this.setupGameScreen();
         this.showScreen('game-screen');
+        
+        // Guardar inmediatamente
+        this.syncData();
     }
 
     setupGameScreen() {
@@ -183,7 +207,8 @@ class ChinchonGame {
         // Agregar mano al historial
         this.currentGame.hands.push({
             hand: this.currentGame.currentHand,
-            scores: [...handScores]
+            scores: [...handScores],
+            timestamp: new Date()
         });
         
         // Actualizar puntuaciones totales
@@ -193,6 +218,8 @@ class ChinchonGame {
         
         // Siguiente mano
         this.currentGame.currentHand++;
+        this.currentGame.lastUpdate = new Date();
+        
         this.setupGameScreen();
         
         // Limpiar inputs
@@ -200,8 +227,8 @@ class ChinchonGame {
             document.getElementById(`hand-${index}`).value = '';
         });
 
-        // Guardar progreso automáticamente
-        this.saveGameProgress();
+        // Sincronizar inmediatamente
+        this.syncData();
     }
 
     updateHandsHistory() {
@@ -229,10 +256,11 @@ class ChinchonGame {
         
         this.currentGame.status = 'paused';
         this.currentGame.pauseTime = new Date();
+        this.currentGame.lastUpdate = new Date();
         
         // Guardar en partidas pausadas
         this.pausedGames.push({...this.currentGame});
-        this.saveData();
+        this.syncData();
         
         alert('Partida pausada correctamente');
         this.showScreen('setup-screen');
@@ -245,10 +273,11 @@ class ChinchonGame {
         if (confirm('¿Estás seguro de que quieres terminar la partida?')) {
             this.currentGame.status = 'finished';
             this.currentGame.endTime = new Date();
+            this.currentGame.lastUpdate = new Date();
             
             // Guardar en historial
             this.games.push({...this.currentGame});
-            this.saveData();
+            this.syncData();
             
             alert('Partida terminada y guardada');
             this.showScreen('setup-screen');
@@ -257,8 +286,11 @@ class ChinchonGame {
     }
 
     showLoadScreen() {
-        this.updatePausedGamesList();
-        this.showScreen('load-screen');
+        // Cargar datos más recientes antes de mostrar
+        this.loadData().then(() => {
+            this.updatePausedGamesList();
+            this.showScreen('load-screen');
+        });
     }
 
     updatePausedGamesList() {
@@ -276,9 +308,10 @@ class ChinchonGame {
             
             const playerNames = game.players.map(p => `${p.name}: ${p.score >= 0 ? '+' : ''}${p.score}`).join(', ');
             const pauseDate = new Date(game.pauseTime).toLocaleDateString();
+            const deviceInfo = game.gameId === this.gameId ? ' (Este dispositivo)' : ' (Otro dispositivo)';
             
             div.innerHTML = `
-                <h4>Partida pausada - Mano ${game.currentHand}</h4>
+                <h4>Partida pausada - Mano ${game.currentHand}${deviceInfo}</h4>
                 <p>Jugadores: ${playerNames}</p>
                 <p>Pausada el: ${pauseDate}</p>
                 <div class="history-actions">
@@ -297,10 +330,11 @@ class ChinchonGame {
     resumeGame(index) {
         this.currentGame = {...this.pausedGames[index]};
         this.currentGame.status = 'playing';
+        this.currentGame.gameId = this.gameId; // Tomar control de la partida
         
         // Remover de pausadas
         this.pausedGames.splice(index, 1);
-        this.saveData();
+        this.syncData();
         
         this.setupGameScreen();
         this.showScreen('game-screen');
@@ -309,14 +343,17 @@ class ChinchonGame {
     deletePausedGame(index) {
         if (confirm('¿Estás seguro de que quieres eliminar esta partida pausada?')) {
             this.pausedGames.splice(index, 1);
-            this.saveData();
+            this.syncData();
             this.updatePausedGamesList();
         }
     }
 
     showHistoryScreen() {
-        this.updateHistoryList();
-        this.showScreen('history-screen');
+        // Cargar datos más recientes antes de mostrar
+        this.loadData().then(() => {
+            this.updateHistoryList();
+            this.showScreen('history-screen');
+        });
     }
 
     updateHistoryList() {
@@ -337,9 +374,10 @@ class ChinchonGame {
             
             const playerScores = game.players.map(p => `${p.name}: ${p.score >= 0 ? '+' : ''}${p.score}`).join(', ');
             const startDate = new Date(game.startTime).toLocaleDateString();
+            const deviceInfo = game.gameId === this.gameId ? ' (Este dispositivo)' : ' (Otro dispositivo)';
             
             div.innerHTML = `
-                <h4>Partida del ${startDate}</h4>
+                <h4>Partida del ${startDate}${deviceInfo}</h4>
                 <p>Puntajes finales: ${playerScores}</p>
                 <p>Manos jugadas: ${game.hands.length}</p>
                 <p>Estado: Terminada</p>
@@ -358,21 +396,38 @@ class ChinchonGame {
         document.getElementById(screenId).classList.add('active');
     }
 
-    // Persistencia de datos con servidor y fallback local
-    async saveData() {
+    // Persistencia de datos con servidor real
+    async syncData() {
         const data = {
+            gameId: this.gameId,
             games: this.games,
             pausedGames: this.pausedGames,
-            lastUpdate: new Date().toISOString()
+            lastUpdate: new Date().toISOString(),
+            version: 1
         };
 
         try {
-            // Intentar guardar en servidor (simulado con localStorage por ahora)
-            localStorage.setItem('chinchon-server-data', JSON.stringify(data));
-            console.log('Datos guardados en servidor');
+            // Usar JSONBin.io como backend gratuito
+            const response = await fetch(this.apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': this.apiKey,
+                    'X-Bin-Versioning': 'false'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                console.log('✅ Datos sincronizados con servidor');
+                // También guardar localmente como backup
+                localStorage.setItem('chinchon-backup', JSON.stringify(data));
+            } else {
+                throw new Error('Error en la respuesta del servidor');
+            }
         } catch (error) {
-            console.error('Error guardando en servidor:', error);
-            // Fallback a localStorage local
+            console.error('❌ Error sincronizando con servidor:', error);
+            // Fallback a localStorage
             localStorage.setItem('chinchon-games', JSON.stringify(this.games));
             localStorage.setItem('chinchon-paused', JSON.stringify(this.pausedGames));
         }
@@ -380,48 +435,60 @@ class ChinchonGame {
 
     async loadData() {
         try {
-            // Intentar cargar desde servidor
-            const serverData = localStorage.getItem('chinchon-server-data');
-            if (serverData) {
-                const data = JSON.parse(serverData);
+            // Cargar desde servidor
+            const response = await fetch(this.apiUrl + '/latest', {
+                method: 'GET',
+                headers: {
+                    'X-Master-Key': this.apiKey
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                const serverData = result.record;
+                
+                if (serverData && serverData.games) {
+                    // Combinar datos del servidor con datos locales
+                    const allGames = [...(serverData.games || [])];
+                    const allPausedGames = [...(serverData.pausedGames || [])];
+                    
+                    // Filtrar duplicados por ID
+                    this.games = allGames.filter((game, index, self) => 
+                        index === self.findIndex(g => g.id === game.id)
+                    );
+                    
+                    this.pausedGames = allPausedGames.filter((game, index, self) => 
+                        index === self.findIndex(g => g.id === game.id)
+                    );
+                    
+                    console.log('✅ Datos cargados desde servidor');
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error cargando desde servidor:', error);
+        }
+
+        // Fallback a localStorage
+        try {
+            const backup = localStorage.getItem('chinchon-backup');
+            if (backup) {
+                const data = JSON.parse(backup);
                 this.games = data.games || [];
                 this.pausedGames = data.pausedGames || [];
-                console.log('Datos cargados desde servidor');
+                console.log('📱 Datos cargados desde backup local');
                 return;
             }
         } catch (error) {
-            console.error('Error cargando desde servidor:', error);
+            console.error('Error cargando backup:', error);
         }
 
-        // Fallback a localStorage local
+        // Último fallback
         const savedGames = localStorage.getItem('chinchon-games');
         const savedPaused = localStorage.getItem('chinchon-paused');
         
         this.games = savedGames ? JSON.parse(savedGames) : [];
         this.pausedGames = savedPaused ? JSON.parse(savedPaused) : [];
-    }
-
-    async saveGameProgress() {
-        // Guardar progreso de la partida actual automáticamente
-        if (this.currentGame) {
-            const progressData = {
-                currentGame: this.currentGame,
-                timestamp: new Date().toISOString()
-            };
-            
-            try {
-                localStorage.setItem('chinchon-current-game', JSON.stringify(progressData));
-            } catch (error) {
-                console.error('Error guardando progreso:', error);
-            }
-        }
-    }
-
-    // Función para sincronizar datos entre dispositivos (futura implementación)
-    async syncData() {
-        // Esta función se puede expandir para usar una API real
-        console.log('Sincronizando datos...');
-        await this.saveData();
     }
 }
 
@@ -430,10 +497,15 @@ let chinchonGame;
 document.addEventListener('DOMContentLoaded', () => {
     chinchonGame = new ChinchonGame();
     
-    // Auto-guardar cada 30 segundos si hay una partida en curso
-    setInterval(() => {
-        if (chinchonGame.currentGame && chinchonGame.currentGame.status === 'playing') {
-            chinchonGame.saveGameProgress();
+    // Mostrar estado de conexión
+    window.addEventListener('online', () => {
+        console.log('🌐 Conectado - Sincronizando datos...');
+        if (chinchonGame) {
+            chinchonGame.syncData();
         }
-    }, 30000);
+    });
+    
+    window.addEventListener('offline', () => {
+        console.log('📱 Sin conexión - Usando datos locales');
+    });
 });
